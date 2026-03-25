@@ -1,0 +1,14 @@
+https://docs.openclaw.ai/plugins/architecture.md
+https://docs.openclaw.ai/plugins/building-plugins.md
+https://docs.openclaw.ai/plugins/bundles.md
+https://docs.openclaw.ai/plugins/community.md
+https://docs.openclaw.ai/plugins/manifest.md
+https://docs.openclaw.ai/plugins/sdk-channel-plugins.md
+https://docs.openclaw.ai/plugins/sdk-entrypoints.md
+https://docs.openclaw.ai/plugins/sdk-migration.md
+https://docs.openclaw.ai/plugins/sdk-overview.md
+https://docs.openclaw.ai/plugins/sdk-provider-plugins.md
+https://docs.openclaw.ai/plugins/sdk-runtime.md
+https://docs.openclaw.ai/plugins/sdk-setup.md
+https://docs.openclaw.ai/plugins/sdk-testing.md
+https://docs.openclaw.ai/plugins/voice-call.md
