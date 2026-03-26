@@ -8,7 +8,8 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-URLS_DIR = ROOT / "urls"
+DOCS_ROOT = ROOT / "docs"
+URLS_DIR = DOCS_ROOT / "urls"
 LLMS_URL = "https://docs.openclaw.ai/llms.txt"
 DOC_PREFIX = "https://docs.openclaw.ai/"
 
@@ -58,7 +59,7 @@ def main() -> None:
     downloaded = 0
 
     for rel in rels:
-        path = ROOT / rel
+        path = DOCS_ROOT / rel
 
         if args.check_only:
             if not path.exists():

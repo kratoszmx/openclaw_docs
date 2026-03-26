@@ -5,10 +5,11 @@ import re
 import subprocess
 from pathlib import Path
 
-ROOT = Path('/Users/ddy88haojiqi/projects/openclaw_docs')
+ROOT = Path(__file__).resolve().parent
+DOCS_ROOT = ROOT / 'docs'
 SECTIONS = ['install', 'channels', 'tools', 'plugins', 'platforms', 'gateway', 'reference', 'help']
-URLS_DIR = ROOT / 'urls'
-URLS_DIR.mkdir(exist_ok=True)
+URLS_DIR = DOCS_ROOT / 'urls'
+URLS_DIR.mkdir(parents=True, exist_ok=True)
 
 text = subprocess.check_output(
     'curl -L --max-time 30 https://docs.openclaw.ai/llms.txt 2>/dev/null',
@@ -40,14 +41,14 @@ def download(url: str, out: Path) -> bool:
     return result.returncode == 0
 
 for url, rel in ordered:
-    out = ROOT / rel
+    out = DOCS_ROOT / rel
     out.parent.mkdir(parents=True, exist_ok=True)
     ok = download(url, out)
     if not ok:
         failures.append((rel, url, 'initial-download-failed'))
 
 for _, rel in ordered:
-    p = ROOT / rel
+    p = DOCS_ROOT / rel
     txt = p.read_text(errors='ignore') if p.exists() else ''
     body = [ln for ln in txt.splitlines() if ln.strip() and not ln.strip().startswith('>')]
     if len(txt.strip()) == 0 or len(body) <= 3:

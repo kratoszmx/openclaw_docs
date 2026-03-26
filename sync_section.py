@@ -6,9 +6,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path('/Users/ddy88haojiqi/projects/openclaw_docs')
-URLS_DIR = ROOT / 'urls'
-URLS_DIR.mkdir(exist_ok=True)
+ROOT = Path(__file__).resolve().parent
+DOCS_ROOT = ROOT / 'docs'
+URLS_DIR = DOCS_ROOT / 'urls'
+URLS_DIR.mkdir(parents=True, exist_ok=True)
 section = sys.argv[1]
 
 text = subprocess.check_output(
@@ -40,14 +41,14 @@ def download(url: str, out: Path) -> bool:
 
 fails = []
 for url, rel in ordered:
-    out = ROOT / rel
+    out = DOCS_ROOT / rel
     out.parent.mkdir(parents=True, exist_ok=True)
     ok = download(url, out)
     if not ok:
         fails.append((rel, url, 'initial'))
 
 for _, rel in ordered:
-    p = ROOT / rel
+    p = DOCS_ROOT / rel
     txt = p.read_text(errors='ignore') if p.exists() else ''
     body = [ln for ln in txt.splitlines() if ln.strip() and not ln.strip().startswith('>')]
     if len(txt.strip()) == 0 or len(body) <= 3:

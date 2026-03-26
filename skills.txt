@@ -1,10 +1,10 @@
 1. 本项目用于同步并维护 `docs.openclaw.ai` 文档镜像，目标是保持本地文档尽量最新、可复查、可复跑。
-2. 文档必须存放在仓库既有目录结构下（如 `install/`、`channels/`、`providers/`、`concepts/`），不要散落到临时目录。
+2. 官网文档统一存放在 `docs/` 下，并保持官网原有层级（如 `docs/install/`、`docs/channels/`、`docs/providers/`、`docs/concepts/`），不要散落到临时目录。
 3. 阅读策略：先看标题层级，再看超链接，最后只对相关页面做深入阅读。
 4. 本地 Markdown 的超链接必须判断相关性：
    - 本地已有 → 直接读本地；
    - 本地没有 → 先同步到仓库再读。
-   相关抓取链接记录在 `urls/`。
+   相关抓取链接记录在 `docs/urls/`。
 5. 发现本地 `.md` 为空、明显截断或正文极少时，优先判定为抓取不完整，先重新下载再使用。
 6. 全站完整性检查优先用：`python3 sync_all_docs.py --check-only`；需要修复时用：`python3 sync_all_docs.py`。
 7. 当前分析目标不是泛泛总结，而是判断本机 OpenClaw 配置是否有：
