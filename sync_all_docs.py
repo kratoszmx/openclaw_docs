@@ -2,41 +2,8 @@
 from __future__ import annotations
 
 import argparse
-import re
-import time
-import urllib.request
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-DOCS_ROOT = ROOT / "docs"
-URLS_DIR = DOCS_ROOT / "urls"
-LLMS_URL = "https://docs.openclaw.ai/llms.txt"
-DOC_PREFIX = "https://docs.openclaw.ai/"
-
-
-def fetch_bytes(url: str, timeout: int = 45, retries: int = 5) -> bytes:
-    last_err: Exception | None = None
-    for i in range(retries):
-        try:
-            with urllib.request.urlopen(url, timeout=timeout) as r:
-                return r.read()
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(1.1 * (i + 1))
-    raise RuntimeError(f"fetch failed: {url} :: {last_err}")
-
-
-def fetch_text(url: str, timeout: int = 45, retries: int = 5) -> str:
-    return fetch_bytes(url, timeout=timeout, retries=retries).decode("utf-8", "ignore")
-
-
-def body_line_count(text: str) -> int:
-    return sum(1 for ln in text.splitlines() if ln.strip() and not ln.strip().startswith(">"))
-
-
-def extract_doc_urls(llms_text: str) -> list[str]:
-    urls = sorted(set(re.findall(r"https://docs\.openclaw\.ai/[^\s)]+\.md", llms_text)))
-    return urls
+from sync_common import all_doc_urls, check_rels, rels_from_urls, sync_rels, write_url_list
 
 
 def main() -> None:
@@ -46,76 +13,31 @@ def main() -> None:
     parser.add_argument("--timeout", type=int, default=45, help="HTTP timeout seconds (default: 45)")
     args = parser.parse_args()
 
-    URLS_DIR.mkdir(exist_ok=True)
-
-    llms = fetch_text(LLMS_URL, timeout=args.timeout)
-    urls = extract_doc_urls(llms)
-    rels = [u.replace(DOC_PREFIX, "") for u in urls]
-    (URLS_DIR / "all.txt").write_text("\n".join(urls) + "\n", encoding="utf-8")
-
-    missing: list[str] = []
-    bad: list[str] = []
-    failures: list[tuple[str, str]] = []
-    downloaded = 0
-
-    for rel in rels:
-        path = DOCS_ROOT / rel
-
-        if args.check_only:
-            if not path.exists():
-                missing.append(rel)
-                continue
-            txt = path.read_text(encoding="utf-8", errors="ignore")
-            if len(txt.strip()) == 0 or body_line_count(txt) <= 3:
-                bad.append(rel)
-            continue
-
-        need_download = args.update_all or (not path.exists())
-
-        if not need_download:
-            txt = path.read_text(encoding="utf-8", errors="ignore")
-            if len(txt.strip()) == 0 or body_line_count(txt) <= 3:
-                need_download = True
-
-        if not need_download:
-            continue
-
-        url = DOC_PREFIX + rel
-        try:
-            data = fetch_bytes(url, timeout=args.timeout)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-            downloaded += 1
-        except Exception as e:  # noqa: BLE001
-            failures.append((rel, f"download:{e}"))
-            continue
-
-        txt = path.read_text(encoding="utf-8", errors="ignore")
-        if len(txt.strip()) == 0 or body_line_count(txt) <= 3:
-            try:
-                data = fetch_bytes(url, timeout=args.timeout)
-                path.write_bytes(data)
-            except Exception as e:  # noqa: BLE001
-                failures.append((rel, f"redownload:{e}"))
-                continue
-
-            txt2 = path.read_text(encoding="utf-8", errors="ignore")
-            if len(txt2.strip()) == 0 or body_line_count(txt2) <= 3:
-                bad.append(rel)
+    urls = all_doc_urls(timeout=args.timeout)
+    rels = rels_from_urls(urls)
+    write_url_list("all.txt", urls)
 
     print(f"expected_docs={len(rels)}")
+
     if args.check_only:
+        missing, bad = check_rels(rels)
         print(f"missing={len(missing)}")
         print(f"bad={len(bad)}")
-    else:
-        print(f"downloaded={downloaded}")
-        print(f"postcheck_bad={len(bad)}")
-        print(f"failures={len(failures)}")
+        if missing:
+            print("MISSING:")
+            for rel in missing:
+                print(rel)
+        if bad:
+            print("BAD:")
+            for rel in bad:
+                print(rel)
+        return
 
-    if missing:
-        print("MISSING:")
-        for rel in missing:
-            print(rel)
+    downloaded, failures = sync_rels(rels, timeout=args.timeout, force_download=args.update_all)
+    _, bad = check_rels(rels)
+    print(f"downloaded={downloaded}")
+    print(f"postcheck_bad={len(bad)}")
+    print(f"failures={len(failures)}")
 
     if bad:
         print("BAD:")

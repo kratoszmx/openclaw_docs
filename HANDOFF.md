@@ -16,16 +16,17 @@
 
 ## 已完成工作
 - 已确认本项目的工作规则：进入项目后先读 `skills.txt`。
-- 已确认现有脚本职责，并补充了全站校验/修复脚本：
+- 已确认现有脚本职责，并补充/整理了同步脚本体系：
   - `docs_scan.py`
   - `sync_section.py`
   - `sync_selected_sections.py`
   - `sync_all_docs.py`
+  - `sync_common.py`
   - `patch_openclaw_config.py`
 - 已完成全站文档镜像补齐与异常文档修复。
 - 已维护项目说明文档与交接文档为中文版本。
 - 已整理 `skills.txt`，去掉重复内容，保留执行规则。
-- 已补充 `docs/urls/` 下的来源链接清单，便于后续追踪与复跑。
+- 已补充根目录 `urls/` 下的来源链接清单，便于后续追踪与复跑。
 
 ## 当前正在进行的工作
 - 继续保持文档镜像与官网一致。

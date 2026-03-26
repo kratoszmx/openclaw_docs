@@ -1,64 +1,28 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import re
-import subprocess
 import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-DOCS_ROOT = ROOT / 'docs'
-URLS_DIR = DOCS_ROOT / 'urls'
-URLS_DIR.mkdir(parents=True, exist_ok=True)
-section = sys.argv[1]
+from sync_common import all_doc_urls, filter_rels_by_prefix, rels_from_urls, sync_rels, write_url_list
 
-text = subprocess.check_output(
-    'curl -L --max-time 30 https://docs.openclaw.ai/llms.txt 2>/dev/null',
-    shell=True,
-    text=True,
-    executable='/bin/bash',
-)
-pattern = re.compile(r'\((https://docs\.openclaw\.ai/(' + re.escape(section) + r'/[^)]+\.md))\)')
-items = []
-for line in text.splitlines():
-    m = pattern.search(line)
-    if m:
-        items.append((m.group(1), m.group(2)))
 
-seen = set()
-ordered = []
-for url, rel in items:
-    if rel not in seen:
-        seen.add(rel)
-        ordered.append((url, rel))
+def main() -> None:
+    if len(sys.argv) != 2:
+        raise SystemExit("usage: python3 sync_section.py <section>")
 
-(URLS_DIR / f'{section}.txt').write_text('\n'.join(url for url, _ in ordered) + '\n')
+    section = sys.argv[1]
+    urls = all_doc_urls()
+    rels = filter_rels_by_prefix(rels_from_urls(urls), section)
+    write_url_list(f"{section}.txt", [f"https://docs.openclaw.ai/{rel}" for rel in rels])
 
-def download(url: str, out: Path) -> bool:
-    cmd = f'curl --http1.1 -L --retry 3 --retry-delay 1 --max-time 45 "{url}" -o "{out}"'
-    result = subprocess.run(cmd, shell=True, executable='/bin/bash')
-    return result.returncode == 0
+    downloaded, failures = sync_rels(rels, force_download=True)
+    print(f"{section}: {len(rels)}")
+    print(f"downloaded: {downloaded}")
+    if failures:
+        print("FAILURES:")
+        for rel, msg in failures:
+            print(f"{rel}\t{msg}")
 
-fails = []
-for url, rel in ordered:
-    out = DOCS_ROOT / rel
-    out.parent.mkdir(parents=True, exist_ok=True)
-    ok = download(url, out)
-    if not ok:
-        fails.append((rel, url, 'initial'))
 
-for _, rel in ordered:
-    p = DOCS_ROOT / rel
-    txt = p.read_text(errors='ignore') if p.exists() else ''
-    body = [ln for ln in txt.splitlines() if ln.strip() and not ln.strip().startswith('>')]
-    if len(txt.strip()) == 0 or len(body) <= 3:
-        url = f'https://docs.openclaw.ai/{rel}'
-        ok = download(url, p)
-        if not ok:
-            fails.append((rel, url, 'redownload'))
-
-print(f'{section}: {len(ordered)}')
-if fails:
-    print('FAILURES:')
-    for rel, url, reason in fails:
-        print(f'{reason}\t{rel}\t{url}')
+if __name__ == "__main__":
+    main()

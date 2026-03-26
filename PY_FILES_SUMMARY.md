@@ -24,7 +24,7 @@
 ### `sync_section.py`
 **作用**
 - 按单个 section 从 `llms.txt` 同步文档。
-- 将抓取链接写入 `docs/urls/<section>.txt`。
+- 将抓取链接写入 `urls/<section>.txt`。
 - 下载对应 `.md` 到 `docs/` 目录。
 - 对疑似空/截断文档自动重试下载。
 
@@ -46,7 +46,7 @@
   - `gateway`
   - `reference`
   - `help`
-- 将链接写入 `docs/urls/selected_sections.txt`。
+- 将链接写入 `urls/selected_sections.txt`。
 - 下载并对疑似异常文档执行重试。
 
 **用法**
@@ -60,12 +60,29 @@
 - 检查缺失文档。
 - 检查空文档或疑似截断文档。
 - 自动下载或重下修复。
-- 生成 `docs/urls/all.txt`。
+- 生成 `urls/all.txt`。
 
 **用法**
 - `python3 sync_all_docs.py --check-only`：仅检查
 - `python3 sync_all_docs.py`：修复缺失或异常文档
 - `python3 sync_all_docs.py --update-all`：强制重下全站文档
+
+---
+
+### `sync_common.py`
+**作用**
+- 作为同步脚本的共享模块。
+- 统一处理：
+  - 读取 `llms.txt`
+  - URL 提取
+  - 文档下载
+  - 空文档/疑似截断检测
+  - URL 列表写入
+- 用于减少 `sync_all_docs.py`、`sync_section.py`、`sync_selected_sections.py` 的重复代码。
+
+**用法**
+- 不直接单独运行。
+- 由其他同步脚本导入使用。
 
 ---
 
