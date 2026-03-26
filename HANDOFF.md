@@ -1,53 +1,52 @@
 # HANDOFF.md
 
-This file is the continuity layer for the `openclaw_docs` repo.
-Use it so future me / other agents do not need long chat history to continue.
+本文件是 `openclaw_docs` 项目的**持续交接记录**。
+作用是：让后续 Agent 不依赖长聊天历史，也能快速知道项目目标、当前进度和下一步动作。
 
-## Repo purpose
-- Store and sync content from `https://docs.openclaw.ai/`.
-- Keep downloaded docs in repo structure for reuse by future agents.
-- Read docs with a layered strategy instead of blindly reading everything.
+## 1) 这个文件的功能
+- 记录项目的长期目标与工作边界。
+- 记录已完成的重要工作（避免重复劳动）。
+- 记录当前正在进行的任务与下一步计划。
+- 作为多 Agent 协作时的统一“项目记忆浓缩层”。
 
-## Current working rules
-- Read `skills.txt` before working in this repo.
-- Prefer user zsh environment when running commands.
-- For docs reading:
-  1. scan headings first,
-  2. then inspect markdown links,
-  3. only read full body when relevant.
-- If a local `.md` is empty / truncated / has almost no body, re-download before trusting it.
-- Relevant links:
-  - if local exists, read local;
-  - if local missing, download into this repo first, then read.
+## 2) 项目目标（长期不变）
+- 将 `https://docs.openclaw.ai/` 的在线文档同步到本仓库。
+- 本地 `.md` 文件视为官网页面镜像，尽量保持最新。
+- 在阅读文档后，输出对本机 OpenClaw 配置的改进建议（补充/完善/注意事项）。
 
-## Current helper scripts
-- `docs_scan.py`
-  - scans markdown headings
-  - extracts markdown links
-  - flags files as `empty_or_truncated`
-- `patch_openclaw_config.py`
-  - one-off local machine helper for OpenClaw config changes
-  - not part of the generic docs-reading workflow
+## 3) 已完成工作（摘要）
+- 已确认并执行项目工作规则：先读 `skills.txt`，再开展同步与分析。
+- 已补齐并验证以下脚本用途：
+  - `docs_scan.py`：扫描标题/链接/疑似空文档。
+  - `sync_section.py`：按单个 section 同步。
+  - `sync_selected_sections.py`：按预设 sections 批量同步。
+  - `sync_all_docs.py`：全站校验+修复（新增）。
+  - `patch_openclaw_config.py`：本机配置一次性补丁（非通用同步流程）。
+- 已完成全站完整性修复与复核：
+  - `expected_docs=360`
+  - 缺失文档修复后 `missing=0`
+  - 空/疑似截断文档复核后 `bad=0`
+- 已补充 URL 清单（`urls/`），用于后续追踪来源与复跑。
 
-## Current documentation priorities
-For the user's current setup, these pages are usually more relevant:
-- `channels/telegram.md`
-- `channels/whatsapp.md`
-- `channels/imessage.md`
-- `channels/pairing.md`
-- `channels/troubleshooting.md`
-- `install/index.md`
-- `install/updating.md`
-- `gateway/*`
-- `help/*`
+## 4) 当前正在完成的工作（重点）
+当前阶段是“文档治理 + 可交付整理”，包括：
 
-## Current known conclusions
-- Keep update channel on `stable`.
-- Do not switch gateway runtime to Bun for the current Telegram/WhatsApp setup.
-- HTTP/2 fetch errors seen during bulk download appear to be transient fetch issues, not proof of a broken local setup.
-- For bulk sync, prefer stable download behavior (HTTP/1.1 + retry).
+1. **文档质量稳定化**
+   - 保持镜像文档可复查、可复跑、可增量修复。
+   - 发现空文档/异常文档时，优先使用脚本自动修复。
 
-## Context handling policy
-- Do not rely on very old chat context when continuing work.
-- Externalize important state into repo files (`skills.txt`, `HANDOFF.md`, scripts, tests).
-- When the workflow or rules change, update this file.
+2. **项目说明文档完善（中文）**
+   - 维护本交接文件（HANDOFF）为中文版本。
+   - 维护项目说明文件，简述项目功能与各 Python 脚本职责。
+   - 精简 `skills.txt` 中重复内容，保留可执行规则。
+
+3. **提交与发布准备**
+   - 提交前运行 `pytest -q`。
+   - 测试通过后再执行 `git add/commit/push`。
+
+## 5) 下一位 Agent 的执行顺序（建议）
+1. 先读 `skills.txt` 与本文件。
+2. 跑一次：`python3 sync_all_docs.py --check-only`。
+3. 若有异常，再跑：`python3 sync_all_docs.py` 修复。
+4. 若需提交，先跑：`pytest -q`。
+5. 测试通过后再 `commit + push`。
