@@ -1,15 +1,9 @@
-1. 本项目用于同步并维护 `docs.openclaw.ai` 文档镜像，目标是保持本地文档尽量最新、可复查、可复跑。
-2. 官网文档统一存放在 `docs/` 下，并保持官网原有层级（如 `docs/install/`、`docs/channels/`、`docs/providers/`、`docs/concepts/`），不要散落到临时目录。
-3. 阅读策略：先看标题层级，再看超链接，最后只对相关页面做深入阅读。
-4. 本地 Markdown 的超链接必须判断相关性：
-   - 本地已有 → 直接读本地；
-   - 本地没有 → 先同步到仓库再读。
-   相关抓取链接记录在根目录 `urls/`。
-5. 发现本地 `.md` 为空、明显截断或正文极少时，优先判定为抓取不完整，先重新下载再使用。
-6. 全站完整性检查优先用：`python3 sync_all_docs.py --check-only`；需要修复时用：`python3 sync_all_docs.py`。
-7. 当前分析目标不是泛泛总结，而是判断本机 OpenClaw 配置是否有：
-   - 需要补充的设置；
-   - 需要完善的设置；
-   - 需要注意但不一定立即修改的设置。
-8. 脚本放在仓库可见位置并保持用途清晰（例如 `docs_scan.py`、`sync_section.py`、`sync_selected_sections.py`、`sync_all_docs.py`、`sync_common.py`、`patch_openclaw_config.py`）。
-9. 每次 push 前必须先跑测试：`pytest -q`。
+1. 项目目标：同步并维护 `docs.openclaw.ai` 的本地 Markdown 镜像，要求结果尽量最新、可复查、可修复、可复跑。
+2. 官网文档统一存放在 `docs/` 下，并尽量保持官网原有目录层级；抓取来源统一记录在根目录 `urls/`。
+3. 进入项目后先读本文件；交接进度看 `HANDOFF.md`；Python 脚本具体用法看 `PY_FILES_SUMMARY.md`。
+4. 阅读文档时可以使用程序，先看标题层级，再看超链接，最后只对当前任务相关页面做深入阅读。
+5. 处理本地 Markdown 链接时：本地已有就直接读；本地没有就先同步到仓库，再继续阅读或分析。
+6. 发现本地 `.md` 为空、正文极少或明显截断时，优先视为抓取不完整，先重新下载，再使用内容。
+7. 完整性检查优先运行：`python3 sync_all_docs.py --check-only`；需要修复时运行：`python3 sync_all_docs.py`。
+8. 脚本应放在仓库可见位置、命名清晰、职责单一；新增或调整脚本时，及时同步更新 `PY_FILES_SUMMARY.md`。
+9. 每次 push 前必须先运行：`pytest -q`。
