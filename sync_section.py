@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import sys
+import argparse
 
-from sync_common import all_doc_urls, filter_rels_by_prefix, rels_from_urls, sync_rels, write_url_list
+from sync_common import all_doc_urls, filter_rels_by_prefix, rels_from_urls, sync_rels, urls_from_rels, write_url_list
 
 
 def main() -> None:
-    if len(sys.argv) != 2:
-        raise SystemExit("usage: python3 sync_section.py <section>")
+    parser = argparse.ArgumentParser(description="Sync one docs.openclaw.ai section")
+    parser.add_argument("section", help="Top-level section name, e.g. tools")
+    parser.add_argument("--timeout", type=int, default=45, help="HTTP timeout seconds (default: 45)")
+    args = parser.parse_args()
 
-    section = sys.argv[1]
-    urls = all_doc_urls()
-    rels = filter_rels_by_prefix(rels_from_urls(urls), section)
-    write_url_list(f"{section}.txt", [f"https://docs.openclaw.ai/{rel}" for rel in rels])
+    rels = filter_rels_by_prefix(rels_from_urls(all_doc_urls(timeout=args.timeout)), args.section)
+    write_url_list(f"{args.section}.txt", urls_from_rels(rels))
 
-    downloaded, failures = sync_rels(rels, force_download=True)
-    print(f"{section}: {len(rels)}")
+    downloaded, failures = sync_rels(rels, timeout=args.timeout, force_download=True)
+    print(f"{args.section}: {len(rels)}")
     print(f"downloaded: {downloaded}")
     if failures:
         print("FAILURES:")

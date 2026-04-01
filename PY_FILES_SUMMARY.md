@@ -3,11 +3,23 @@
 本文件只记录仓库内 Python 脚本的用途与用法。
 项目规则见 `skills.txt`，项目状态与交接信息见 `HANDOFF.md`。
 
+## `project_env.py`
+**作用**
+- 统一补充 sibling `../myutils` 到导入路径。
+- 让本项目脚本可以直接复用 `myutils` 的通用函数。
+
+**用法**
+- 不直接单独运行。
+- 由 `docs_scan.py`、`sync_common.py` 等脚本导入使用。
+
+---
+
 ## `docs_scan.py`
 **作用**
 - 扫描一个或多个 Markdown 文件/目录。
 - 提取标题层级与 Markdown 链接。
 - 标记疑似空文档或疑似截断文档。
+- 内部复用 `myutils/markdown_utils.py`。
 
 **用法**
 - `python3 docs_scan.py <文件或目录>`
@@ -23,6 +35,7 @@
 
 **用法**
 - `python3 sync_section.py <section>`
+- `python3 sync_section.py <section> --timeout 45`
 - 示例：`python3 sync_section.py tools`
 
 ---
@@ -45,6 +58,7 @@
 
 **用法**
 - `python3 sync_selected_sections.py`
+- `python3 sync_selected_sections.py --timeout 45`
 
 ---
 
@@ -60,6 +74,7 @@
 - `python3 sync_all_docs.py --check-only`：仅检查
 - `python3 sync_all_docs.py`：修复缺失或异常文档
 - `python3 sync_all_docs.py --update-all`：强制重下全站文档
+- `python3 sync_all_docs.py --timeout 45`
 
 ---
 
@@ -68,20 +83,8 @@
 - 同步脚本的共享模块。
 - 统一处理 `llms.txt` 读取、URL 提取、文档下载、空文档/截断检测、URL 列表写入等公共逻辑。
 - 统一处理官网相对路径到本地镜像路径的映射规则：官网根级 Markdown 映射到 `docs/others/`，其余路径仍落在 `docs/` 原 section 下。
+- 内部复用 `myutils/http_utils.py` 与 `myutils/markdown_utils.py`。
 
 **用法**
 - 不直接单独运行。
 - 由 `sync_all_docs.py`、`sync_section.py`、`sync_selected_sections.py` 导入使用。
-
----
-
-## `patch_openclaw_config.py`
-**作用**
-- 一次性修改本机 `~/.openclaw/openclaw.json` 的辅助脚本。
-- 用于本机配置修补，不属于通用文档同步流程。
-
-**用法**
-- `python3 patch_openclaw_config.py`
-
-**说明**
-- 运行前应先确认修改目标与影响范围。

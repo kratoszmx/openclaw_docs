@@ -1,9 +1,7 @@
+0. 通用复用规则见 `skill.txt`（软链接到共享的 `../myutils/generalskill.txt`）；本文件只保留 `openclaw_docs` 项目特有要求。
 1. 项目目的：同步并维护 `docs.openclaw.ai` 的本地 Markdown 镜像，在設置或查詢openclaw時可以閱讀這些markdown文檔
 2. 官网文档统一存放在 `docs/` 下；其中官网根级的分散 Markdown 文件统一归档到本地 `docs/others/`，其余文档尽量保持官网原有目录层级；抓取来源统一记录在根目录 `urls/`。
-3. 进入项目后先读本文件；交接进度看 `HANDOFF.md`；Python 脚本具体用法看 `PY_FILES_SUMMARY.md`。
-4. 阅读文档时可以使用程序，先看标题层级，再看超链接，最后只对当前任务相关页面做深入阅读。
-5. 处理本地 Markdown 链接时：本地已有就直接读；本地没有就先同步到仓库，再继续阅读或分析。
-6. 发现本地 `.md` 为空、正文极少或明显截断时，优先视为抓取不完整，先重新下载，再使用内容。
-7. 完整性检查优先运行：`python3 sync_all_docs.py --check-only`；需要修复时运行：`python3 sync_all_docs.py`。
-8. 脚本应放在仓库可见位置、命名清晰、职责单一；新增或调整脚本时，及时同步更新 `PY_FILES_SUMMARY.md`。
-9. 每次 push 前必须先运行：`pytest -q`且通過。
+3. 发现本地 `.md` 为空、正文极少或明显截断时，优先视为抓取不完整，先重新下载，再使用内容。
+4. 完整性检查优先运行：`python3 sync_all_docs.py --check-only`；需要修复时运行：`python3 sync_all_docs.py`。
+5. 阅读openclaw文档时可以使用程序，先看标题层级，再看超链接，最后只对当前任务相关页面做深入阅读。
+6. 处理本地 Markdown 链接时：本地已有就直接读；本地没有就先同步到仓库，再继续阅读或分析。

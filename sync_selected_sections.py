@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-from sync_common import all_doc_urls, filter_rels_by_prefixes, rels_from_urls, sync_rels, write_url_list
+import argparse
+
+from sync_common import all_doc_urls, filter_rels_by_prefixes, rels_from_urls, sync_rels, urls_from_rels, write_url_list
 
 SECTIONS = ["install", "channels", "tools", "plugins", "platforms", "gateway", "reference", "help"]
 
 
 def main() -> None:
-    urls = all_doc_urls()
-    rels = filter_rels_by_prefixes(rels_from_urls(urls), SECTIONS)
-    write_url_list("selected_sections.txt", [f"https://docs.openclaw.ai/{rel}" for rel in rels])
+    parser = argparse.ArgumentParser(description="Sync selected docs.openclaw.ai sections")
+    parser.add_argument("--timeout", type=int, default=45, help="HTTP timeout seconds (default: 45)")
+    args = parser.parse_args()
 
-    downloaded, failures = sync_rels(rels, force_download=True)
+    rels = filter_rels_by_prefixes(rels_from_urls(all_doc_urls(timeout=args.timeout)), SECTIONS)
+    write_url_list("selected_sections.txt", urls_from_rels(rels))
+
+    downloaded, failures = sync_rels(rels, timeout=args.timeout, force_download=True)
     print(f"SYNCED {len(rels)} files")
     print(f"downloaded: {downloaded}")
     for section in SECTIONS:
