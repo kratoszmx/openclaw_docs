@@ -54,6 +54,7 @@
 - 检查缺失文档。
 - 检查空文档或疑似截断文档。
 - 生成 `urls/all.txt`。
+- 按本地镜像规则写入文档：官网根级 Markdown 归档到 `docs/others/`，其余文档保持原 section 路径。
 
 **用法**
 - `python3 sync_all_docs.py --check-only`：仅检查
@@ -66,6 +67,7 @@
 **作用**
 - 同步脚本的共享模块。
 - 统一处理 `llms.txt` 读取、URL 提取、文档下载、空文档/截断检测、URL 列表写入等公共逻辑。
+- 统一处理官网相对路径到本地镜像路径的映射规则：官网根级 Markdown 映射到 `docs/others/`，其余路径仍落在 `docs/` 原 section 下。
 
 **用法**
 - 不直接单独运行。

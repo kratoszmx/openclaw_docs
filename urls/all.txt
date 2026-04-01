@@ -1,11 +1,14 @@
 https://docs.openclaw.ai/auth-credential-semantics.md
 https://docs.openclaw.ai/automation/auth-monitoring.md
+https://docs.openclaw.ai/automation/clawflow.md
 https://docs.openclaw.ai/automation/cron-jobs.md
 https://docs.openclaw.ai/automation/cron-vs-heartbeat.md
 https://docs.openclaw.ai/automation/gmail-pubsub.md
 https://docs.openclaw.ai/automation/hooks.md
+https://docs.openclaw.ai/automation/index.md
 https://docs.openclaw.ai/automation/poll.md
 https://docs.openclaw.ai/automation/standing-orders.md
+https://docs.openclaw.ai/automation/tasks.md
 https://docs.openclaw.ai/automation/troubleshooting.md
 https://docs.openclaw.ai/automation/webhook.md
 https://docs.openclaw.ai/channels/bluebubbles.md
@@ -27,6 +30,7 @@ https://docs.openclaw.ai/channels/msteams.md
 https://docs.openclaw.ai/channels/nextcloud-talk.md
 https://docs.openclaw.ai/channels/nostr.md
 https://docs.openclaw.ai/channels/pairing.md
+https://docs.openclaw.ai/channels/qqbot.md
 https://docs.openclaw.ai/channels/signal.md
 https://docs.openclaw.ai/channels/slack.md
 https://docs.openclaw.ai/channels/synology-chat.md
@@ -57,11 +61,13 @@ https://docs.openclaw.ai/cli/directory.md
 https://docs.openclaw.ai/cli/dns.md
 https://docs.openclaw.ai/cli/docs.md
 https://docs.openclaw.ai/cli/doctor.md
+https://docs.openclaw.ai/cli/flows.md
 https://docs.openclaw.ai/cli/gateway.md
 https://docs.openclaw.ai/cli/health.md
 https://docs.openclaw.ai/cli/hooks.md
 https://docs.openclaw.ai/cli/index.md
 https://docs.openclaw.ai/cli/logs.md
+https://docs.openclaw.ai/cli/mcp.md
 https://docs.openclaw.ai/cli/memory.md
 https://docs.openclaw.ai/cli/message.md
 https://docs.openclaw.ai/cli/models.md
@@ -95,6 +101,10 @@ https://docs.openclaw.ai/concepts/context.md
 https://docs.openclaw.ai/concepts/delegate-architecture.md
 https://docs.openclaw.ai/concepts/features.md
 https://docs.openclaw.ai/concepts/markdown-formatting.md
+https://docs.openclaw.ai/concepts/memory-builtin.md
+https://docs.openclaw.ai/concepts/memory-honcho.md
+https://docs.openclaw.ai/concepts/memory-qmd.md
+https://docs.openclaw.ai/concepts/memory-search.md
 https://docs.openclaw.ai/concepts/memory.md
 https://docs.openclaw.ai/concepts/messages.md
 https://docs.openclaw.ai/concepts/model-failover.md
@@ -162,6 +172,7 @@ https://docs.openclaw.ai/index.md
 https://docs.openclaw.ai/install/ansible.md
 https://docs.openclaw.ai/install/azure.md
 https://docs.openclaw.ai/install/bun.md
+https://docs.openclaw.ai/install/clawdock.md
 https://docs.openclaw.ai/install/development-channels.md
 https://docs.openclaw.ai/install/digitalocean.md
 https://docs.openclaw.ai/install/docker-vm-runtime.md
@@ -323,6 +334,7 @@ https://docs.openclaw.ai/tools/browser-wsl2-windows-remote-cdp-troubleshooting.m
 https://docs.openclaw.ai/tools/browser.md
 https://docs.openclaw.ai/tools/btw.md
 https://docs.openclaw.ai/tools/clawhub.md
+https://docs.openclaw.ai/tools/code-execution.md
 https://docs.openclaw.ai/tools/creating-skills.md
 https://docs.openclaw.ai/tools/diffs.md
 https://docs.openclaw.ai/tools/duckduckgo-search.md
@@ -333,6 +345,7 @@ https://docs.openclaw.ai/tools/exec.md
 https://docs.openclaw.ai/tools/firecrawl.md
 https://docs.openclaw.ai/tools/gemini-search.md
 https://docs.openclaw.ai/tools/grok-search.md
+https://docs.openclaw.ai/tools/image-generation.md
 https://docs.openclaw.ai/tools/index.md
 https://docs.openclaw.ai/tools/kimi-search.md
 https://docs.openclaw.ai/tools/llm-task.md
@@ -343,6 +356,7 @@ https://docs.openclaw.ai/tools/pdf.md
 https://docs.openclaw.ai/tools/perplexity-search.md
 https://docs.openclaw.ai/tools/plugin.md
 https://docs.openclaw.ai/tools/reactions.md
+https://docs.openclaw.ai/tools/searxng-search.md
 https://docs.openclaw.ai/tools/skills-config.md
 https://docs.openclaw.ai/tools/skills.md
 https://docs.openclaw.ai/tools/slash-commands.md

@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DOCS_ROOT = ROOT / "docs"
+OTHERS_ROOT = DOCS_ROOT / "others"
 URLS_DIR = ROOT / "urls"
 LLMS_URL = "https://docs.openclaw.ai/llms.txt"
 DOC_PREFIX = "https://docs.openclaw.ai/"
@@ -50,11 +51,21 @@ def rels_from_urls(urls: list[str]) -> list[str]:
 
 
 def doc_path(rel: str) -> Path:
-    return DOCS_ROOT / rel
+    """Map a docs.openclaw.ai relative markdown path to the local mirror path.
+
+    Local layout rule:
+    - nested docs keep their original section path under `docs/`
+    - root-level markdown files are grouped under `docs/others/`
+    """
+    rel_path = Path(rel)
+    if rel_path.parent == Path("."):
+        return OTHERS_ROOT / rel_path.name
+    return DOCS_ROOT / rel_path
 
 
 def ensure_dirs() -> None:
     DOCS_ROOT.mkdir(exist_ok=True)
+    OTHERS_ROOT.mkdir(exist_ok=True)
     URLS_DIR.mkdir(exist_ok=True)
 
 
